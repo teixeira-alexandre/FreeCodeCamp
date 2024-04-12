@@ -79,9 +79,9 @@ const allSongs = [
 const audio = new Audio();
 
 let userData = {
-    songs: [...allSongs],
-    currentSong: null,
-    songCurrentTime: 0,
+  songs: [...allSongs],
+  currentSong: null,
+  songCurrentTime: 0,
 };
 
 const playSong = (id) => {
@@ -98,15 +98,16 @@ const playSong = (id) => {
   userData.currentSong = song;
   playButton.classList.add("playing");
   highlightCurrentSong();
+  setPlayerDisplay();
 
   audio.play();
-}
+};
 
 const pauseSong = () => {
   userData.songCurrentTime = audio.currentTime;
   playButton.classList.remove("playing");
   audio.pause();
-}
+};
 
 const playNextSong = () => {
   if(userData?.currentSong === null){
@@ -117,7 +118,7 @@ const playNextSong = () => {
     const nextSong = userData?.songs[currentSongIndex + 1];
     playSong(nextSong.id);
   }
-}
+};
 
 const playPreviousSong = () => {
   if(userData?.currentSong === null){
@@ -128,11 +129,22 @@ const playPreviousSong = () => {
     const previousSong = userData?.songs[currentSongIndex - 1];
     playSong(previousSong.id);
   }
+};
+
+const setPlayerDisplay = () => {
+  const playingSong = document.getElementById("player-song-title");
+  const songArtist = document.getElementById("player-song-artist");
+  const currentTitle = userData?.currentSong?.title;
+  const currentArtist = userData?.currentSong?.artist;
+  playingSong.textContent = currentTitle ? currentTitle : "";
+  songArtist.textContent = currentArtist ? currentArtist : "";
+
 }
 
 const highlightCurrentSong = () => {
   const playlistSongElements = document.querySelectorAll(".playlist-song");
-  const songToHighlight = document.getElementById(`song-${userData?.currentSong?.id}`
+  const songToHighlight = document.getElementById(
+    `song-${userData?.currentSong?.id}`
   );
 
   playlistSongElements.forEach((songEl) => {
@@ -142,12 +154,10 @@ const highlightCurrentSong = () => {
   if(songToHighlight) songToHighlight.setAttribute("aria-current", "true");
 };
 
-
-
 const renderSongs = (array) => {
   const songsHTML = array.map((song) => {
       return `
-      <li id="song-${song.id}" class"playlist-song">
+      <li id="song-${song.id}" class="playlist-song">
           <button class="playlist-song-info" onclick="playSong(${song.id})">
               <span class="playlist-song-title">${song.title}</span>
               <span class="playlist-song-artist">${song.artist}</span>
@@ -198,7 +208,7 @@ const sortSongs = () => {
   });
 
   return userData?.songs;
-}
+};
 
 renderSongs(sortSongs());
 
